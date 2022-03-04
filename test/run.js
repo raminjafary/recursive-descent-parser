@@ -11,6 +11,7 @@ const tests = [
   require("./variable-test.js"),
   require("./if-test.js"),
   require("./relational-test.js"),
+  require("./equality-test.js"),
 ];
 
 const parser = new Parser();
@@ -18,12 +19,7 @@ const parser = new Parser();
 function exec() {
   const program = `
  
-  if(x > 5) {
-    x = 5;
-  } else {
-    x = 3;
-  }
-  
+  x >= 5 == true;
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));

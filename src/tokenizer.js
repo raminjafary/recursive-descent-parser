@@ -7,6 +7,9 @@ const spec = [
   [/^\blet\b/, "let"],
   [/^\bif\b/, "if"],
   [/^\belse\b/, "else"],
+  [/^\btrue\b/, "true"],
+  [/^\bfalse\b/, "false"],
+  [/^\bnull\b/, "null"],
   // -------------------
   // Number:
   [/^\d+/, "NUMBER"],
@@ -26,6 +29,9 @@ const spec = [
   // -------------------
   // Identifiers:
   [/^\w+/, "IDENTIFIER"],
+  // -------------------
+  // Equality operator:
+  [/^[=!]=/, "EQUALITY_OPERATOR"],
   // -------------------
   // Assignment operators:
   [/^=/, "SIMPLE_ASSIGN"],

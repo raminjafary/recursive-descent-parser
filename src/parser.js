@@ -208,12 +208,12 @@ exports.Parser = class Parser {
 
   /**
    * AssignmentExpression
-   * : RelationalExpression
+   * : EqualityExpression
    * | LeftHandSideExpression AssignmentOperator AssignmentExpression
    * ;
    */
   AssignmentExpression() {
-    const left = this.RelationalExpression();
+    const left = this.EqualityExpression();
 
     if (!this.isAssignmentOperator(this.lookahead.type)) {
       return left;
@@ -225,6 +225,16 @@ exports.Parser = class Parser {
       left: this.checkValidAssignmentTarget(left),
       right: this.AssignmentExpression(),
     };
+  }
+
+  /**
+   * EqualityExpression
+   * : RelationalExpression
+   * | RelationalExpression EQUALITY_OPERATOR EqualityExpression
+   * ;
+   */
+  EqualityExpression() {
+    return this.BinaryExpression("RelationalExpression", "EQUALITY_OPERATOR");
   }
 
   /**
@@ -348,7 +358,13 @@ exports.Parser = class Parser {
   }
 
   isLiteral(tokenType) {
-    return tokenType === "NUMBER" || tokenType === "STRING";
+    return (
+      tokenType === "NUMBER" ||
+      tokenType === "STRING" ||
+      tokenType === "true" ||
+      tokenType === "false" ||
+      tokenType === "null"
+    );
   }
 
   /**
@@ -367,6 +383,8 @@ exports.Parser = class Parser {
    * Literal
    * : NumericLiteral
    * | StringLiteral
+   * | BooleanLiteral
+   * | NullLiteral
    * ;
    */
   Literal() {
@@ -375,9 +393,44 @@ exports.Parser = class Parser {
         return this.NumericLiteral();
       case "STRING":
         return this.StringLiteral();
+      case "true":
+        return this.BooleanLiteral(true);
+      case "false":
+        return this.BooleanLiteral(false);
+      case "null":
+        return this.NullLiteral();
     }
 
     throw new SyntaxError("Literal: unexpected literal production");
+  }
+
+  /**
+   * BooleanLiteral
+   * : true
+   * | false
+   * ;
+   */
+  BooleanLiteral(value) {
+    this.eat(value ? "true" : "false");
+
+    return {
+      type: "BooleanLiteral",
+      value,
+    };
+  }
+
+  /**
+   * NullLiteral
+   * : null
+   * ;
+   */
+  NullLiteral() {
+    this.eat("null");
+
+    return {
+      type: "NullLiteral",
+      value: null,
+    };
   }
 
   /**
