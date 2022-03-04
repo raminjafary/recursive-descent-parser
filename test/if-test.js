@@ -1,5 +1,6 @@
 module.exports = function (test) {
-  test(`
+  test(
+    `
     
     if(x) {
         x = 2;
@@ -7,7 +8,7 @@ module.exports = function (test) {
         x = 8;
     }
 
-    `),
+    `,
     {
       type: "Program",
       body: [
@@ -59,15 +60,17 @@ module.exports = function (test) {
           },
         },
       ],
-    };
+    }
+  );
 
-  test(`
+  test(
+    `
     
     if(x) {
         x = 2;
     }
 
-    `),
+    `,
     {
       type: "Program",
       body: [
@@ -100,5 +103,6 @@ module.exports = function (test) {
           alternate: null,
         },
       ],
-    };
+    }
+  );
 };
