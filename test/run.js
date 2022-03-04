@@ -10,14 +10,15 @@ const tests = [
   require("./assignment-test.js"),
   require("./variable-test.js"),
   require("./if-test.js"),
+  require("./relational-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-
-  if(x) {
+ 
+  if(x > 5) {
     x = 5;
   } else {
     x = 3;
@@ -28,13 +29,13 @@ function exec() {
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-exec();
+// exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);
   assert.deepEqual(ast, expected);
 }
 
-// tests.forEach((run) => run(test));
+tests.forEach((run) => run(test));
 
 console.log("All assertions passed!");

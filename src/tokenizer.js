@@ -35,6 +35,9 @@ const spec = [
   [/^[+\-]/, "ADDITIVE_OPERATOR"],
   [/^[*\/]/, "MULTIPLICATIVE_OPERATOR"],
   // -------------------
+  // Relational operators:
+  [/^[><]=?/, "RELATIONAL_OPERATOR"],
+  // -------------------
   // Whitespace:
   [/^\s+/, null],
   // -------------------

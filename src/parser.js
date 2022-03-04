@@ -208,12 +208,12 @@ exports.Parser = class Parser {
 
   /**
    * AssignmentExpression
-   * : AdditiveExpression
+   * : RelationalExpression
    * | LeftHandSideExpression AssignmentOperator AssignmentExpression
    * ;
    */
   AssignmentExpression() {
-    const left = this.AdditiveExpression();
+    const left = this.RelationalExpression();
 
     if (!this.isAssignmentOperator(this.lookahead.type)) {
       return left;
@@ -225,6 +225,16 @@ exports.Parser = class Parser {
       left: this.checkValidAssignmentTarget(left),
       right: this.AssignmentExpression(),
     };
+  }
+
+  /**
+   * RelationalExpression
+   * : AdditiveExpression
+   * | AdditiveExpression RELATIONAL_OPERATOR RelationalExpression
+   * ;
+   */
+  RelationalExpression() {
+    return this.BinaryExpression("AdditiveExpression", "RELATIONAL_OPERATOR");
   }
 
   /**
