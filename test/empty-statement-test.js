@@ -1,8 +1,10 @@
 module.exports = function (test) {
-    test(';', {
-        type: 'Program',
-        body: [{
-            type: 'EmptyStatement',
-        }]
-    })
-}
+  test(";", {
+    type: "Program",
+    body: [
+      {
+        type: "EmptyStatement",
+      },
+    ],
+  });
+};

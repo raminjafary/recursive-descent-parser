@@ -1,5 +1,6 @@
 module.exports = function (test) {
-    test(`
+  test(
+    `
     {
         42;
 
@@ -8,50 +9,51 @@ module.exports = function (test) {
         "hello";
     }
     `,
+    {
+      type: "Program",
+      body: [
         {
-            type: "Program",
-            body: [
-                {
-                    type: 'BlockStatement',
-                    body: [
-                        {
-                            type: "ExpressionStatement",
-                            expression: {
-                                type: "NumericLiteral",
-                                value: 42
-                            }
-                        },
-                        {
-                            type: "ExpressionStatement",
-                            expression: {
-                                type: "StringLiteral",
-                                value: "hello"
-                            }
-                        },
-                        {
-                            type: "ExpressionStatement",
-                            expression: {
-                                type: "StringLiteral",
-                                value: "hello"
-                            }
-                        }
-                    ]
-                }
-            ]
-        })
-
-    test(`{}`, {
-        type: "Program",
-        body: [
+          type: "BlockStatement",
+          body: [
             {
-                type: 'BlockStatement',
-                body: []
-            }
-        ]
-    })
+              type: "ExpressionStatement",
+              expression: {
+                type: "NumericLiteral",
+                value: 42,
+              },
+            },
+            {
+              type: "ExpressionStatement",
+              expression: {
+                type: "StringLiteral",
+                value: "hello",
+              },
+            },
+            {
+              type: "ExpressionStatement",
+              expression: {
+                type: "StringLiteral",
+                value: "hello",
+              },
+            },
+          ],
+        },
+      ],
+    }
+  );
 
+  test(`{}`, {
+    type: "Program",
+    body: [
+      {
+        type: "BlockStatement",
+        body: [],
+      },
+    ],
+  });
 
-    test(`
+  test(
+    `
     {
         42;
 
@@ -59,33 +61,35 @@ module.exports = function (test) {
         'hello';
       }
     }
-    `, {
-        type: "Program",
-        body: [
+    `,
+    {
+      type: "Program",
+      body: [
+        {
+          type: "BlockStatement",
+          body: [
             {
-                type: 'BlockStatement',
-                body: [
-                    {
-                        type: "ExpressionStatement",
-                        expression: {
-                            type: "NumericLiteral",
-                            value: 42
-                        }
-                    },
-                    {
-                        type: 'BlockStatement',
-                        body: [
-                            {
-                                type: "ExpressionStatement",
-                                expression: {
-                                    type: "StringLiteral",
-                                    value: 'hello'
-                                }
-                            },
-                        ]
-                    }
-                ]
-            }
-        ]
-    })
-}
+              type: "ExpressionStatement",
+              expression: {
+                type: "NumericLiteral",
+                value: 42,
+              },
+            },
+            {
+              type: "BlockStatement",
+              body: [
+                {
+                  type: "ExpressionStatement",
+                  expression: {
+                    type: "StringLiteral",
+                    value: "hello",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    }
+  );
+};

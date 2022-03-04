@@ -1,17 +1,17 @@
-const assert = require('assert');
-const { Parser } = require("../src/parser")
+const assert = require("assert");
+const { Parser } = require("../src/parser");
 
 const tests = [
-    require('./literal-test.js'),
-    require('./statement-list.js'),
-    require('./block-test.js'),
-    require('./empty-statement-test.js'),
-]
+  require("./literal-test.js"),
+  require("./statement-list.js"),
+  require("./block-test.js"),
+  require("./empty-statement-test.js"),
+];
 
-const parser = new Parser()
+const parser = new Parser();
 
 function exec() {
-    const program = `
+  const program = `
 ;
     /**
      * multi comment
@@ -23,18 +23,18 @@ function exec() {
     // single line comment
 
     "hello";
-`
-    const ast = parser.parse(program)
-    console.log(JSON.stringify(ast, undefined, 2));
+`;
+  const ast = parser.parse(program);
+  console.log(JSON.stringify(ast, undefined, 2));
 }
 
 // exec()
 
 function test(program, expected) {
-    const ast = parser.parse(program)
-    assert.deepEqual(ast, expected)
+  const ast = parser.parse(program);
+  assert.deepEqual(ast, expected);
 }
 
-tests.forEach(run => run(test))
+tests.forEach((run) => run(test));
 
-console.log('All assertions passed!')
+console.log("All assertions passed!");
