@@ -60,5 +60,5 @@ const SExpressionFactory = {
 module.exports = {
   defaultFactory,
   SExpressionFactory,
-  astNode: AST_MODE === 'default' ? defaultFactory : SExpressionFactory
+  astNode: AST_MODE === "default" ? defaultFactory : SExpressionFactory,
 };

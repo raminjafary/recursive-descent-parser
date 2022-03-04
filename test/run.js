@@ -6,29 +6,20 @@ const tests = [
   require("./statement-list.js"),
   require("./block-test.js"),
   require("./empty-statement-test.js"),
+  require("./math-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-;
-    /**
-     * multi comment
-     * /
-    42;
-
-    'hello';
-
-    // single line comment
-
-    "hello";
+  2 + 2 * 9;
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-// exec()
+// exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);

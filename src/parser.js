@@ -87,7 +87,7 @@ exports.Parser = class Parser {
     this.eat("{");
     const body = this.lookahead.type !== "}" ? this.StatementList("}") : [];
     this.eat("}");
-    return astNode.BlockStatement(body)
+    return astNode.BlockStatement(body);
   }
 
   /**
@@ -110,6 +110,12 @@ exports.Parser = class Parser {
     return this.AdditiveExpression();
   }
 
+  /**
+   * AdditiveExpression
+   * : MultiplicativeExpression
+   * | AdditiveExpression ADDITIVE_OPERATOR MultiplicativeExpression
+   * ;
+   */
   AdditiveExpression() {
     return this.BinaryExpression(
       "MultiplicativeExpression",
@@ -117,6 +123,12 @@ exports.Parser = class Parser {
     );
   }
 
+  /**
+   * MultiplicativeExpression
+   * : PrimaryExpression
+   * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR PrimaryExpression
+   * ;
+   */
   MultiplicativeExpression() {
     return this.BinaryExpression(
       "PrimaryExpression",
@@ -143,6 +155,12 @@ exports.Parser = class Parser {
     return left;
   }
 
+  /**
+   * PrimaryExpression
+   * : Literal
+   * | ParanthesizedExpression
+   * ;
+   */
   PrimaryExpression() {
     switch (this.lookahead.type) {
       case "(":
@@ -152,6 +170,11 @@ exports.Parser = class Parser {
     }
   }
 
+  /**
+   * ParanthesizedExpression
+   * : "(" Expression ")"
+   * ;
+   */
   ParanthesizedExpression() {
     this.eat("(");
     const expression = this.Expression();

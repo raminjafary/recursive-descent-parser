@@ -18,7 +18,7 @@ const spec = [
   [/^\(/, "("],
   [/^\)/, ")"],
   // -------------------
-  // Operators:
+  // Math operators:
   [/^[+\-]/, "ADDITIVE_OPERATOR"],
   [/^[*\/]/, "MULTIPLICATIVE_OPERATOR"],
   // -------------------
