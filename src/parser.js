@@ -1,5 +1,5 @@
 const { Tokenizer } = require("./tokenizer");
-
+const { astNode } = require("./ast");
 exports.Parser = class Parser {
   constructor() {
     this.input = "";
@@ -13,6 +13,9 @@ exports.Parser = class Parser {
     this.input = input;
     this.tokenizer.init(input);
 
+    // Prime the tokenizer to obtain the first
+    // token which is our lookahead. The lookahead is
+    // used for predictive parsing.
     this.lookahead = this.tokenizer.getNextToken();
 
     // Parses recursively starting from the main
@@ -28,10 +31,7 @@ exports.Parser = class Parser {
    * ;
    */
   Program() {
-    return {
-      type: "Program",
-      body: this.StatementList(),
-    };
+    return astNode.Program(this.StatementList());
   }
 
   /**
@@ -75,9 +75,7 @@ exports.Parser = class Parser {
    */
   EmptyStatement() {
     this.eat(";");
-    return {
-      type: "EmptyStatement",
-    };
+    return astNode.EmptyStatement();
   }
 
   /**
@@ -89,10 +87,7 @@ exports.Parser = class Parser {
     this.eat("{");
     const body = this.lookahead.type !== "}" ? this.StatementList("}") : [];
     this.eat("}");
-    return {
-      type: "BlockStatement",
-      body,
-    };
+    return astNode.BlockStatement(body)
   }
 
   /**
@@ -103,10 +98,7 @@ exports.Parser = class Parser {
   ExpressionStatement() {
     const expression = this.Expression();
     this.eat(";");
-    return {
-      type: "ExpressionStatement",
-      expression,
-    };
+    return astNode.ExpressionStatement(expression);
   }
 
   /**
@@ -191,10 +183,7 @@ exports.Parser = class Parser {
    */
   NumericLiteral() {
     const token = this.eat("NUMBER");
-    return {
-      type: "NumericLiteral",
-      value: Number(token.value),
-    };
+    return astNode.NumericLiteral(Number(token.value));
   }
 
   /**
@@ -204,10 +193,7 @@ exports.Parser = class Parser {
    */
   StringLiteral() {
     const token = this.eat("STRING");
-    return {
-      type: "StringLiteral",
-      value: token.value.slice(1, -1),
-    };
+    return astNode.StringLiteral(token.value.slice(1, -1));
   }
 
   eat(tokenType) {
