@@ -8,19 +8,30 @@ const tests = [
   require("./empty-statement-test.js"),
   require("./math-test.js"),
   require("./assignment-test.js"),
+  require("./variable-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-  x = 42;
+  let x;
+
+  let f,n;
+
+  let g = 3;
+
+  let y, z = 3;
+
+  let foo = bar = 20;
+
+  r = 10;
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-// exec();
+exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);
