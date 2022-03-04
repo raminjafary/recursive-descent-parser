@@ -103,13 +103,81 @@ exports.Parser = class Parser {
 
   /**
    * Expression
-   * : AdditiveExpression
+   * : AssignmentExpression
    * ;
    */
   Expression() {
-    return this.AdditiveExpression();
+    return this.AssignmentExpression();
   }
 
+  /**
+   * AssignmentExpression
+   * : AdditiveExpression
+   * | LeftHandSideExpression AssignmentOperator AssignmentExpression
+   * ;
+   */
+  AssignmentExpression() {
+    const left = this.AdditiveExpression();
+
+    if (!this.isAssignmentOperator(this.lookahead.type)) {
+      return left;
+    }
+
+    return {
+      type: "AssignmentExpression",
+      operator: this.AssignmentOperator().value,
+      left: this.checkValidAssignmentTarget(left),
+      right: this.AssignmentExpression(),
+    };
+  }
+
+  /**
+   * LeftHandSideExpression
+   * : Identifier
+   * ;
+   */
+  LeftHandSideExpression() {
+    return this.Identifier();
+  }
+
+  /**
+   * Identifier
+   * : IDENTIFIER
+   * ;
+   */
+  Identifier() {
+    const name = this.eat("IDENTIFIER").value;
+    return {
+      type: "Identifier",
+      name,
+    };
+  }
+
+  isAssignmentOperator(tokenType) {
+    return tokenType === "SIMPLE_ASSIGN" || tokenType === "COMPLEX_ASSIGN";
+  }
+
+  checkValidAssignmentTarget(node) {
+    if (node.type === "Identifier") {
+      return node;
+    }
+
+    throw new SyntaxError("Invalid left-hand side in assignment expression");
+  }
+
+  /**
+   * AssignmentOperator
+   * : SIMPLE_ASSIGN
+   * | COMPLEX_ASSIGN
+   * ;
+   */
+  AssignmentOperator() {
+    if (this.lookahead.type === "SIMPLE_ASSIGN") {
+      return this.eat("SIMPLE_ASSIGN");
+    }
+
+    return this.eat("COMPLEX_ASSIGN");
+  }
   /**
    * AdditiveExpression
    * : MultiplicativeExpression
@@ -162,12 +230,19 @@ exports.Parser = class Parser {
    * ;
    */
   PrimaryExpression() {
+    if (this.isLiteral(this.lookahead.type)) {
+      return this.Literal();
+    }
     switch (this.lookahead.type) {
       case "(":
         return this.ParanthesizedExpression();
       default:
-        return this.Literal();
+        return this.LeftHandSideExpression();
     }
+  }
+
+  isLiteral(tokenType) {
+    return tokenType === "NUMBER" || tokenType === "STRING";
   }
 
   /**
