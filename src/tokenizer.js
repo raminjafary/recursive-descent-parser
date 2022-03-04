@@ -5,6 +5,8 @@ const spec = [
   // -------------------
   // Keywords:
   [/^\blet\b/, "let"],
+  [/^\bif\b/, "if"],
+  [/^\belse\b/, "else"],
   // -------------------
   // Number:
   [/^\d+/, "NUMBER"],
