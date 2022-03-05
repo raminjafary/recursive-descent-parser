@@ -123,6 +123,49 @@ exports.Parser = class Parser {
   }
 
   /**
+   * ForStatement
+   * : "for" "(" OptForStatementInit ";" OptExpression ";" OptExpression ")" Statement
+   * ;
+   */
+  ForStatement() {
+    this.eat("for");
+
+    this.eat("(");
+
+    const init = this.lookahead.type !== ";" ? this.ForStatementInit() : null;
+    this.eat(";");
+
+    const test = this.lookahead.type !== ";" ? this.Expression() : null;
+    this.eat(";");
+
+    const update = this.lookahead.type !== ")" ? this.Expression() : null;
+    this.eat(")");
+
+    const body = this.Statement();
+
+    return {
+      type: "ForStatement",
+      init,
+      test,
+      update,
+      body,
+    };
+  }
+
+  /**
+   * ForStatementInit
+   * : VariableStatementInit
+   * | Expression
+   * ;
+   */
+  ForStatementInit() {
+    if (this.lookahead.type === "let") {
+      return this.VariableStatementInit();
+    }
+    return this.Expression();
+  }
+
+  /**
    * WhileStatement
    * : "while" "(" Expression ")" Statement
    * ;
@@ -172,19 +215,30 @@ exports.Parser = class Parser {
   }
 
   /**
-   * VariableDeclaration
-   * : "let" VariableDeclarationList ";"
+   * VariableStatementInit
+   * : "let" VariableDeclarationList
    * ;
    */
-  VariableStatement() {
+
+  VariableStatementInit() {
     this.eat("let");
     const declarations = this.VariableDeclarationList();
-    this.eat(";");
 
     return {
       type: "VariableStatement",
       declarations,
     };
+  }
+
+  /**
+   * VariableStatement
+   * : VariableStatementInit ";"
+   * ;
+   */
+  VariableStatement() {
+    const variableStatement = this.VariableStatementInit();
+    this.eat(";");
+    return variableStatement;
   }
 
   /**

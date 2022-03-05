@@ -16,14 +16,16 @@ const tests = [
   require("./unary-test.js"),
   require("./while-test.js"),
   require("./do-while-test.js"),
+  require("./for-loop-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-  !x;
-  -x;
+  for (let i = 0; i < 10; i += 1) {
+    x += 1;
+}
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
@@ -36,6 +38,6 @@ function test(program, expected) {
   assert.deepEqual(ast, expected);
 }
 
-tests.forEach((run) => run(test));
+// tests.forEach((run) => run(test));
 
 console.log("All assertions passed!");
