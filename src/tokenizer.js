@@ -44,6 +44,10 @@ const spec = [
   // Relational operators:
   [/^[><]=?/, "RELATIONAL_OPERATOR"],
   // -------------------
+  // Logical operators:
+  [/^&&/, "LOGICAL_AND"],
+  [/^\|\|/, "LOGICAL_OR"],
+  // -------------------
   // Whitespace:
   [/^\s+/, null],
   // -------------------
