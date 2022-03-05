@@ -57,6 +57,7 @@ exports.Parser = class Parser {
    * | EmptyStatement
    * | VariableStatement
    * | IfStatement
+   * | IterationStatement
    * ;
    */
   Statement() {
@@ -69,9 +70,77 @@ exports.Parser = class Parser {
         return this.BlockStatement();
       case "let":
         return this.VariableStatement();
+      case "while":
+      case "do":
+      case "for":
+        return this.IterationStatement();
       default:
         return this.ExpressionStatement();
     }
+  }
+
+  /**
+   * IterationStatement
+   * : WhileStatement
+   * | ForStatement
+   * | DoWhileStatement
+   * ;
+   */
+  IterationStatement() {
+    switch (this.lookahead.type) {
+      case "while":
+        return this.WhileStatement();
+      case "do":
+        return this.DoWhileStatement();
+      case "for":
+        return this.ForStatement();
+    }
+  }
+
+  /**
+   * DoWhileStatement
+   * : "do" Statement "while" "(" Expression ")" ";"
+   * ;
+   */
+  DoWhileStatement() {
+    this.eat("do");
+
+    const body = this.Statement();
+
+    this.eat("while");
+
+    this.eat("(");
+    const test = this.Expression();
+    this.eat(")");
+
+    this.eat(";");
+
+    return {
+      type: "DoWhileStatement",
+      body,
+      test,
+    };
+  }
+
+  /**
+   * WhileStatement
+   * : "while" "(" Expression ")" Statement
+   * ;
+   */
+  WhileStatement() {
+    this.eat("while");
+
+    this.eat("(");
+    const test = this.Expression();
+    this.eat(")");
+
+    const body = this.Statement();
+
+    return {
+      type: "WhileStatement",
+      test,
+      body,
+    };
   }
 
   /**
