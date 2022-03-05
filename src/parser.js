@@ -349,15 +349,12 @@ exports.Parser = class Parser {
 
   /**
    * MultiplicativeExpression
-   * : PrimaryExpression
-   * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR PrimaryExpression
+   * : UnaryExpression
+   * | MultiplicativeExpression MULTIPLICATIVE_OPERATOR UnaryExpression
    * ;
    */
   MultiplicativeExpression() {
-    return this.BinaryExpression(
-      "PrimaryExpression",
-      "MULTIPLICATIVE_OPERATOR"
-    );
+    return this.BinaryExpression("UnaryExpression", "MULTIPLICATIVE_OPERATOR");
   }
 
   BinaryExpression(builder, opToken) {
@@ -380,9 +377,49 @@ exports.Parser = class Parser {
   }
 
   /**
+   * UnaryExpression
+   * : LeftHandSideExpression
+   * | ADDITIVE_OPERATOR UnaryExpression
+   * | LOGICAL_NOT UnaryExpression
+   * ;
+   */
+  UnaryExpression() {
+    let operator = null;
+
+    switch (this.lookahead.type) {
+      case "ADDITIVE_OPERATOR":
+        operator = this.eat("ADDITIVE_OPERATOR").value;
+        break;
+      case "LOGICAL_NOT":
+        operator = this.eat("LOGICAL_NOT").value;
+        break;
+    }
+
+    if (operator != null) {
+      return {
+        type: "UnaryExpression",
+        operator,
+        argument: this.UnaryExpression(),
+      };
+    }
+
+    return this.LeftHandSideExpression();
+  }
+
+  /**
+   * PrimaryExpression
+   * : PrimaryExpression
+   * ;
+   */
+  LeftHandSideExpression() {
+    return this.PrimaryExpression();
+  }
+
+  /**
    * PrimaryExpression
    * : Literal
    * | ParanthesizedExpression
+   * | Literal
    * ;
    */
   PrimaryExpression() {
@@ -392,6 +429,8 @@ exports.Parser = class Parser {
     switch (this.lookahead.type) {
       case "(":
         return this.ParanthesizedExpression();
+      case "IDENTIFIER":
+        return this.Identifier();
       default:
         return this.LeftHandSideExpression();
     }

@@ -13,20 +13,21 @@ const tests = [
   require("./relational-test.js"),
   require("./equality-test.js"),
   require("./logical-test.js"),
+  require("./unary-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
- 
-  x >= 5 && true;
+  !x;
+  -x;
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-// exec();
+exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);

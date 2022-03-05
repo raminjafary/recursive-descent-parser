@@ -47,6 +47,7 @@ const spec = [
   // Logical operators:
   [/^&&/, "LOGICAL_AND"],
   [/^\|\|/, "LOGICAL_OR"],
+  [/^!/, "LOGICAL_NOT"],
   // -------------------
   // Whitespace:
   [/^\s+/, null],
