@@ -17,27 +17,28 @@ const tests = [
   require("./while-test.js"),
   require("./do-while-test.js"),
   require("./for-loop-test.js"),
+  require("./function-declrataion-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-  for (let i = 0; i < 10; i += 1) {
-    x += 1;
+  def square(x) {
+    return x * x;
 }
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-exec();
+// exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);
   assert.deepEqual(ast, expected);
 }
 
-// tests.forEach((run) => run(test));
+tests.forEach((run) => run(test));
 
 console.log("All assertions passed!");

@@ -13,6 +13,8 @@ const spec = [
   [/^\bwhile\b/, "while"],
   [/^\bdo\b/, "do"],
   [/^\bfor\b/, "for"],
+  [/^\bdef\b/, "def"],
+  [/^\breturn\b/, "return"],
   // -------------------
   // Number:
   [/^\d+/, "NUMBER"],
