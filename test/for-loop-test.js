@@ -1,7 +1,7 @@
 module.exports = function (test) {
   test(
     `
-       for (let i = 0; i < 10; i += 1) {
+       for(let i = 0; i < 10; i += 1) {
            x += 1;
        }
           `,
@@ -30,7 +30,7 @@ module.exports = function (test) {
             type: "BinaryExpression",
             operator: "<",
             left: {
-              type: "Identifiter",
+              type: "Identifier",
               name: "i",
             },
             right: {
@@ -42,7 +42,7 @@ module.exports = function (test) {
             type: "AssignmentExpression",
             operator: "+=",
             left: {
-              type: "Identifiter",
+              type: "Identifier",
               name: "i",
             },
             right: {
