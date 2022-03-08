@@ -436,11 +436,48 @@ exports.Parser = class Parser {
 
   /**
    * LeftHandSideExpression
-   * : Identifier
+   * : MemberExpression
    * ;
    */
   LeftHandSideExpression() {
-    return this.Identifier();
+    return this.MemberExpression();
+  }
+
+  /**
+   * MemberExpression
+   * : PrimaryExpression
+   * | MemberExpression "." Identifier
+   * | MemberExpression "[" Identifier "]"
+   * ;
+   */
+  MemberExpression() {
+    let object = this.PrimaryExpression();
+
+    while (this.lookahead.type === "." || this.lookahead.type === "[") {
+      if (this.lookahead.type === ".") {
+        this.eat(".");
+        const property = this.Identifier();
+        object = {
+          type: "MemberExpression",
+          computed: false,
+          object,
+          property,
+        };
+      }
+
+      if (this.lookahead.type === "[") {
+        this.eat("[");
+        const property = this.Expression();
+        this.eat("]");
+        object = {
+          type: "MemberExpression",
+          computed: true,
+          object,
+          property,
+        };
+      }
+    }
+    return object;
   }
 
   /**
@@ -461,7 +498,7 @@ exports.Parser = class Parser {
   }
 
   checkValidAssignmentTarget(node) {
-    if (node.type === "Identifier") {
+    if (node.type === "Identifier" || node.type === "MemberExpression") {
       return node;
     }
 
@@ -591,15 +628,6 @@ exports.Parser = class Parser {
     }
 
     return this.LeftHandSideExpression();
-  }
-
-  /**
-   * PrimaryExpression
-   * : PrimaryExpression
-   * ;
-   */
-  LeftHandSideExpression() {
-    return this.PrimaryExpression();
   }
 
   /**

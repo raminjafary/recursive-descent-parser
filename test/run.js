@@ -18,21 +18,20 @@ const tests = [
   require("./do-while-test.js"),
   require("./for-loop-test.js"),
   require("./function-declrataion-test.js"),
+  require("./member-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-  def square(x) {
-    return x * x;
-}
+  a.b.c['d'];
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-// exec();
+exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);
