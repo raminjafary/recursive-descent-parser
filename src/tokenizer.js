@@ -3,6 +3,25 @@
  */
 const spec = [
   // -------------------
+  // Whitespace:
+  [/^\s+/, null],
+  // -------------------
+  // Single-line comments:
+  [/^\/\/.*/, null],
+  // Single-multi-line comments:
+  [/^\/\*[\s\S]*?\*\//, null],
+  // -------------------
+  // Symbols, delimiters:
+  [/^;/, ";"],
+  [/^\{/, "{"],
+  [/^\}/, "}"],
+  [/^\(/, "("],
+  [/^\)/, ")"],
+  [/^,/, ","],
+  [/^\./, "."],
+  [/^\[/, "["],
+  [/^\]/, "]"],
+  // -------------------
   // Keywords:
   [/^\blet\b/, "let"],
   [/^\bif\b/, "if"],
@@ -15,6 +34,11 @@ const spec = [
   [/^\bfor\b/, "for"],
   [/^\bdef\b/, "def"],
   [/^\breturn\b/, "return"],
+  [/^\bclass\b/, "class"],
+  [/^\bextends\b/, "extends"],
+  [/^\bsuper\b/, "super"],
+  [/^\bnew\b/, "new"],
+  [/^\bthis\b/, "this"],
   // -------------------
   // Number:
   [/^\d+/, "NUMBER"],
@@ -23,17 +47,6 @@ const spec = [
   [/^"[^"]*"/, "STRING"],
   // Single quote string:
   [/^'[^']*'/, "STRING"],
-  // -------------------
-  // Symbols, delimiters:
-  [/^;/, ";"],
-  [/^\{/, "{"],
-  [/^\}/, "}"],
-  [/^\(/, "("],
-  [/^\)/, ")"],
-  [/^,/, ","],
-  [/^\./, "."],
-  [/^\[/, "["],
-  [/^\]/, "]"],
   // -------------------
   // Identifiers:
   [/^\w+/, "IDENTIFIER"],
@@ -56,16 +69,6 @@ const spec = [
   [/^&&/, "LOGICAL_AND"],
   [/^\|\|/, "LOGICAL_OR"],
   [/^!/, "LOGICAL_NOT"],
-  // -------------------
-  // Whitespace:
-  [/^\s+/, null],
-  // -------------------
-  // Comments:
-
-  // Single-line comments:
-  [/^\/\/.*/, null],
-  // Single-multi-line comments:
-  [/^\/\*[\s\S]*?\*\//, null],
 ];
 
 /**

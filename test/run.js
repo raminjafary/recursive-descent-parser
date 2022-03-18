@@ -20,19 +20,45 @@ const tests = [
   require("./function-declrataion-test.js"),
   require("./member-test.js"),
   require("./call-test.js"),
+  require("./class-test.js"),
 ];
 
 const parser = new Parser();
 
 function exec() {
   const program = `
-  foo(2);
+  
+  class Point {
+    def constructor(x, y) {
+      this.x = x;
+      this.y = y;
+    }
+
+    def calc() {
+      return this.x + this.y;
+    }
+  }
+
+  class Point2D extends Point {
+    def constructor(x, y, z) {
+      super(x, y);
+      this.z = z;
+    } 
+
+    def calc() {
+      return super() + this.z;
+    }
+  }
+
+
+  let p = new Point2D(10, 20, 30);
+  p.calc();
 `;
   const ast = parser.parse(program);
   console.log(JSON.stringify(ast, undefined, 2));
 }
 
-// exec();
+exec();
 
 function test(program, expected) {
   const ast = parser.parse(program);
